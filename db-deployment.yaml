@@ -15,7 +15,7 @@ spec:
 apiVersion: extensions/v1beta1
 kind: Deployment
 metadata:
-  name: web_container
+  name: mysql_container
 spec:
   replicas: 1
   strategy: {}
@@ -23,7 +23,7 @@ spec:
     metadata:
       creationTimestamp: null
       labels:
-        io.kompose.service: web_container
+        io.kompose.service: mysql_container
     spec:
       containers:
       - env:
@@ -32,7 +32,7 @@ spec:
         - name: MYSQL_ROOT_PASSWORD
           value: root
         image: mysql:5.7
-        name: web_container
+        name: mysql_container
         resources: {}
       restartPolicy: Always
 status: {}
