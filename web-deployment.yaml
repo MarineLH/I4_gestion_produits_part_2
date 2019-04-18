@@ -1,0 +1,42 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: appweb
+spec:
+  selector:
+    io.kompose.service: web_container
+  ports:
+  - protocol: "TCP"
+    port: 8082
+    targetPort: 8082
+    nodePort: 31800
+  type: LoadBalancer
+---
+apiVersion: extensions/v1beta1
+kind: Deployment
+metadata:
+  name: web_container
+spec:
+  replicas: 1
+  strategy: {}
+  template:
+    metadata:
+      creationTimestamp: null
+      labels:
+        io.kompose.service: web_container
+    spec:
+      containers:
+      - env:
+        - name: MYSQL_HOST
+          value: db
+        - name: MYSQL_ROOT_PASSWORD
+          value: root
+        - name: GET_HOSTS_FROM
+          value: dns
+        image: docker.io/marinelh/gestion_produits
+        name: web_container
+        ports:
+        - containerPort: 80
+        resources: {}
+      restartPolicy: Always
+status: {}

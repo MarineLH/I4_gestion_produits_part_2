@@ -1,0 +1,38 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: dbweb
+spec:
+  selector:
+    io.kompose.service: mysql_container
+  ports:
+  - protocol: "TCP"
+    port: 3306
+    targetPort: 3306
+    nodePort: 31300
+  type: LoadBalancer
+---
+apiVersion: extensions/v1beta1
+kind: Deployment
+metadata:
+  name: web_container
+spec:
+  replicas: 1
+  strategy: {}
+  template:
+    metadata:
+      creationTimestamp: null
+      labels:
+        io.kompose.service: web_container
+    spec:
+      containers:
+      - env:
+        - name: MYSQL_DATABASE
+          value: gestion_produits
+        - name: MYSQL_ROOT_PASSWORD
+          value: root
+        image: mysql:5.7
+        name: web_container
+        resources: {}
+      restartPolicy: Always
+status: {}
